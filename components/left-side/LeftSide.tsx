@@ -1,22 +1,22 @@
-import { cn } from "@/lib/utils";
 import { FC } from "react";
-import { LeftSideHeader } from "./LeftSideHeader";
+import { Header } from "../Header";
 import { SearchConversation } from "./SearchConversation";
 import { Feed } from "./Feed";
+import { currentProfile } from "@/lib/CurrentProfile";
+import { redirect } from "next/navigation";
 
-interface LeftSideProps {
-  whereClause?: "conversation";
-}
+interface LeftSideProps {}
 
-export const LeftSide: FC<LeftSideProps> = ({ whereClause }) => {
+export const LeftSide: FC<LeftSideProps> = async () => {
+
+  const profile = await currentProfile();
+  if (!profile?.userId) return redirect("/setup");
   return (
-    <div
-      className={cn(
-        `${whereClause === "conversation" && "hidden md:flex"}`,
-        "flex flex-col max-h-screen"
-      )}
-    >
-      <LeftSideHeader />
+    <div className="flex flex-col max-h-screen">
+      <Header
+        whereClause="home"
+        imageUrl="/whatsapp-bg.webp"
+      />
       <SearchConversation />
       <Feed />
     </div>

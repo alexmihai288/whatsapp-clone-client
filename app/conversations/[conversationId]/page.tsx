@@ -1,5 +1,6 @@
 import { LeftSide } from "@/components/left-side/LeftSide";
 import { FC } from "react";
+import { ChatWrapper } from "../_components/ChatWrapper";
 
 interface pageProps {
   params: { conversationId: string };
@@ -7,11 +8,14 @@ interface pageProps {
 
 const page: FC<pageProps> = ({ params }) => {
   return (
-    <div className="flex items-center">
-      <div className="flex-1">
-        <LeftSide whereClause="conversation" />
+    <div className="flex">
+      <div className="hidden xs:block xs:flex-1">
+        <LeftSide />
       </div>
-      <div className="flex-1">{params.conversationId}</div>
+
+      <div className="flex-1">
+        <ChatWrapper />
+      </div>
     </div>
   );
 };

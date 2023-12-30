@@ -10,7 +10,7 @@ export const Conversation: FC<ConversationProps> = ({}) => {
       <div className="flex justify-between w-full border-b-2 pb-2">
         <div className="">
           <h1>Dingo</h1>
-          <p className="text-xs">Last message</p>
+          <p className="text-xs text-muted-foreground">Last message</p>
         </div>
         <p className="text-xs text-muted-foreground mb-auto">12:55</p>
       </div>
