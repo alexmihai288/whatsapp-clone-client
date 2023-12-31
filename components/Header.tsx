@@ -3,14 +3,27 @@ import { AvatarWrapper } from "./AvatarWrapper";
 import { UserButton } from "@clerk/nextjs";
 import { HomeIcons } from "./HomeIcons";
 import { ConversationIcons } from "@/app/conversations/_components/ConversationIcons";
-
+import { currentProfile } from "@/lib/CurrentProfile";
+import { redirect } from "next/navigation";
+import { db } from "@/lib/db";
 interface HeaderProps {
   imageUrl: string;
   name?: string;
   whereClause: "home" | "conversation";
 }
 
-export const Header: FC<HeaderProps> = ({ imageUrl, name, whereClause }) => {
+export const Header: FC<HeaderProps> = async ({
+  imageUrl,
+  name,
+  whereClause,
+}) => {
+  const profile = await currentProfile();
+  if (!profile?.userId) return redirect("/setup");
+
+  const initialUsers = await db.profile.findMany({
+    take: 10,
+  });
+
   return (
     <div
       className={`${
@@ -26,7 +39,7 @@ export const Header: FC<HeaderProps> = ({ imageUrl, name, whereClause }) => {
         <UserButton />
       )}
       <div className="flex items-center gap-2.5">
-        {whereClause === "home" && <HomeIcons />}
+        {whereClause === "home" && <HomeIcons initialUsers={initialUsers} />}
         {whereClause === "conversation" && <ConversationIcons />}
       </div>
     </div>

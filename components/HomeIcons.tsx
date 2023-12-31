@@ -1,12 +1,15 @@
 "use client";
 
 import { useModal } from "@/hooks/use-modal";
+import { Profile } from "@prisma/client";
 import { MessageCirclePlus, MoreVertical } from "lucide-react";
 import { FC } from "react";
 
-interface HomeIconsProps {}
+interface HomeIconsProps {
+  initialUsers: Profile[] | [];
+}
 
-export const HomeIcons: FC<HomeIconsProps> = ({}) => {
+export const HomeIcons: FC<HomeIconsProps> = ({ initialUsers }) => {
   const { onOpen } = useModal();
 
   return (
@@ -16,7 +19,7 @@ export const HomeIcons: FC<HomeIconsProps> = ({}) => {
         className="cursor-pointer w-5 h-5 text-muted-foreground"
       />
       <MoreVertical
-        onClick={() => onOpen("createConversation")}
+        onClick={() => onOpen("createConversation", { initialUsers })}
         key={2}
         className="cursor-pointer w-5 h-5 text-muted-foreground"
       />

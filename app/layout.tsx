@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/NextThemeProvider";
 import { QueryProvider } from "@/components/providers/QueryProvider";
-import { ModalProider } from "@/components/providers/ModalProvider";
+import { ModalProvider } from "@/components/providers/ModalProvider";
 import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -29,7 +29,7 @@ export default function RootLayout({
             storageKey="whatsapp-theme"
           >
             <QueryProvider>
-              <ModalProider />
+              <ModalProvider />
               {children}
             </QueryProvider>
           </ThemeProvider>

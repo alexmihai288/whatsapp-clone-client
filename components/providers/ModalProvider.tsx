@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { CreateConversationModal } from "../modals/CreateConversationModal";
 
-export const ModalProider = () => {
+export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -11,5 +12,9 @@ export const ModalProider = () => {
 
   if (!isMounted) return null;
 
-  return <></>;
+  return (
+    <>
+      <CreateConversationModal />
+    </>
+  );
 };

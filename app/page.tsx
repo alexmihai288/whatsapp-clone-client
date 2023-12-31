@@ -1,6 +1,6 @@
 import { NativeBg } from "@/components/NativeBg";
 import { LeftSide } from "@/components/left-side/LeftSide";
-  
+
 export default function Home() {
   return (
     <div className="flex">
