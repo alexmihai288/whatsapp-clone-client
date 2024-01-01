@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { FC } from "react";
-import { Button, buttonVariants } from "./ui/button";
+import { buttonVariants } from "./ui/button";
 import { Lock } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";

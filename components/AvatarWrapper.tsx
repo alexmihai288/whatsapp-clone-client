@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
-import { cn } from "@/lib/utils";
+import { Skeleton } from "./ui/skeleton";
 
 interface AvatarWrapperProps {
   imageUrl: string;
@@ -14,7 +14,9 @@ export const AvatarWrapper: FC<AvatarWrapperProps> = ({
   return (
     <Avatar className={className}>
       <AvatarImage src={imageUrl} />
-      <AvatarFallback>CN</AvatarFallback>
+      <AvatarFallback>
+        <Skeleton className="rounded-full h-10 w-10" />
+      </AvatarFallback>
     </Avatar>
   );
 };

@@ -9,10 +9,16 @@ import {
 import { useModal } from "@/hooks/use-modal";
 import { FC, useEffect, useState } from "react";
 import { Input } from "../ui/input";
-import qs from "query-string";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchUsers } from "@/lib/queryFns/fetchUsers";
+import { ScrollArea } from "../ui/scroll-area";
+import { AvatarWrapper } from "../AvatarWrapper";
+import { Loader2 } from "lucide-react";
+import { Button } from "../ui/button";
+import { toast } from "sonner";
+import axios from "axios";
+import { Conversation } from "@prisma/client";
 
 interface CreateConversationModalProps {}
 
@@ -22,14 +28,12 @@ export const CreateConversationModal: FC<
   const [name, setName] = useState("");
 
   const { isOpen, type, onClose, data } = useModal();
-
   const isModalOpen = isOpen && type === "createConversation";
 
-  console.log(data.initialUsers);
   const {
     data: users,
-    isPending,
     refetch,
+    isFetching,
   } = useQuery({
     queryKey: ["users"],
     queryFn: () => fetchUsers({ name }),
@@ -37,8 +41,31 @@ export const CreateConversationModal: FC<
   });
 
   useEffect(() => {
-    refetch();
+    const delayDebounceFn = setTimeout(() => {
+      refetch();
+    }, 200);
+
+    return () => clearTimeout(delayDebounceFn);
   }, [name, refetch]);
+
+  const router = useRouter();
+
+  const queryClient = useQueryClient();
+  const { mutate: startConversation, isPending } = useMutation({
+    mutationFn: async ({ userId }: { userId: string }) => {
+      const { data } = await axios.post("/api/conversation", { userId });
+      return data as Conversation;
+    },
+    onSuccess: (data) => {
+      onClose();
+      router.push(`/conversations/${data.id}`);
+      toast.success(`You started a new conversation with ${data.memberTwoId}`);
+      queryClient.invalidateQueries({ queryKey: ["conversationMember"] });
+    },
+    onError: (error) => {
+      return toast.error("Something went wrong");
+    },
+  });
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
@@ -50,7 +77,43 @@ export const CreateConversationModal: FC<
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="bg-white border-2 border-tealGreen focus-visible:ring-0 focus-visible:ring-offset-0"
+          placeholder="eg: name"
         />
+        {users?.length === 0 ? (
+          <p className="text-muted-foreground">No user: {name}</p>
+        ) : (
+          <div className="flex items-center gap-2.5">
+            <p className="text-muted-foreground">Suggested users:</p>
+            {isFetching && (
+              <Loader2 className="animate-spin text-muted-foreground h-4 w-4" />
+            )}
+          </div>
+        )}
+        <ScrollArea className="h-48">
+          <div className="space-y-2.5">
+            {users?.map((user) => (
+              <div
+                onClick={() => startConversation({ userId: user.userId })}
+                key={user.id}
+                className="flex items-center justify-between p-2 rounded-md hover:text-white hover:bg-tealGreen transition-colors cursor-pointer"
+              >
+                <div className="flex items-center gap-2">
+                  <AvatarWrapper imageUrl={user.imageUrl} />
+                  {user.name}
+                </div>
+                <Button
+                  disabled={isPending}
+                  className="border border-tealGreen text-tealGreenDark"
+                >
+                  Start conversation{" "}
+                  {isPending && (
+                    <Loader2 className="animate-spin ml-2 w-4 h-4" />
+                  )}
+                </Button>
+              </div>
+            ))}
+          </div>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );

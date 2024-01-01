@@ -29,15 +29,15 @@ model Conversation {
   id String @id @default(uuid())
 
   memberOneId String
-  memberOne   Profile @relation("memberOne", fields: [memberOneId], references: [id], onDelete: Cascade)
+  memberOne   Profile @relation("memberOne", fields: [memberOneId], references: [userId], onDelete: Cascade)
 
   memberTwoId String
-  memberTwo   Profile @relation("memberTwo", fields: [memberTwoId], references: [id], onDelete: Cascade)
+  memberTwo   Profile @relation("memberTwo", fields: [memberTwoId], references: [userId], onDelete: Cascade)
 
   messages Message[]
 
   @@unique([memberOneId, memberTwoId])
-  @@index([memberOneId, memberTwoId])
+  @@index([memberTwoId])
 }
 
 model Message {

@@ -6,15 +6,15 @@ interface pageProps {
   params: { conversationId: string };
 }
 
-const page: FC<pageProps> = ({ params }) => {
+const page: FC<pageProps> = ({ params: { conversationId } }) => {
   return (
     <div className="flex">
       <div className="hidden xs:block xs:flex-1">
-        <LeftSide />
+        <LeftSide/>
       </div>
 
       <div className="flex-1">
-        <ChatWrapper />
+        <ChatWrapper conversationId={conversationId} />
       </div>
     </div>
   );

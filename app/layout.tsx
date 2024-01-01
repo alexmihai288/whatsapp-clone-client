@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/providers/NextThemeProvider";
 import { QueryProvider } from "@/components/providers/QueryProvider";
 import { ModalProvider } from "@/components/providers/ModalProvider";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,6 +31,7 @@ export default function RootLayout({
           >
             <QueryProvider>
               <ModalProvider />
+              <Toaster />
               {children}
             </QueryProvider>
           </ThemeProvider>
