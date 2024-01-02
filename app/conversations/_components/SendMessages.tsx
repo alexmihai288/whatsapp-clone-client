@@ -1,14 +1,55 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
+import { useSocket } from "@/hooks/use-socket";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 import { Paperclip, Send, Smile } from "lucide-react";
-import { FC} from "react";
+import { FC, useState } from "react";
 
 interface SendMessagesProps {
+  currentMemberId: string;
+  conversationId: string;
 }
 
-export const SendMessages: FC<SendMessagesProps> = () => {
+export const SendMessages: FC<SendMessagesProps> = ({
+  conversationId,
+  currentMemberId,
+}) => {
+  const [value, setValue] = useState("");
+  const { socket } = useSocket();
 
+  const queryClient = useQueryClient();
+  const { mutate: sendMessage } = useMutation({
+    mutationFn: async ({ value }: { value: string }) => {
+      const { data } = await axios.post("/api/message", {
+        value,
+        conversationId,
+      });
+
+      return data;
+    },
+    onMutate: (variables) => {
+      socket?.emit("send-message", variables.value, currentMemberId);
+      setValue("");
+    },
+    onError: () => {
+      socket?.emit("new-message-error");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["messages"] });
+    },
+  });
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      // Prevent default behavior (e.g., new line) on Enter key press
+      e.preventDefault();
+
+      // Trigger the sendMessage function
+      sendMessage({ value });
+    }
+  };
   return (
     <div className="bg-darkTealGreen flex items-center justify-center gap-5 p-2.5">
       <div className="flex items-center gap-2.5">
@@ -17,11 +58,15 @@ export const SendMessages: FC<SendMessagesProps> = () => {
       </div>
       <div className="flex items-center w-full">
         <Input
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
           placeholder="Write a message..."
           className="bg-[#2a3942] w-full placeholder:text-muted-foreground rounded-tr-none rounded-br-none border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 h-10"
+          onKeyDown={handleKeyPress}
         />
         <div className="flex items-center justify-center rounded-tr-md rounded-br-md h-10 bg-[#2a3942] pr-3">
           <Send
+            onClick={() => sendMessage({ value })}
             className="w-5 h-5 text-muted-foreground"
           />
         </div>

@@ -29,7 +29,6 @@ export async function POST(req: Request) {
     if (existingConversation)
       return new NextResponse("Conversation already exists", { status: 400 });
 
-      console.log(profile.userId, userId)
     const conversation = await db.conversation.create({
       data: {
         memberOneId: profile.userId,

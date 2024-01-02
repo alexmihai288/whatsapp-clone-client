@@ -6,6 +6,7 @@ import { QueryProvider } from "@/components/providers/QueryProvider";
 import { ModalProvider } from "@/components/providers/ModalProvider";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
+import { InitSocket } from "@/components/providers/SocketProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,6 +33,7 @@ export default function RootLayout({
             <QueryProvider>
               <ModalProvider />
               <Toaster />
+              <InitSocket />
               {children}
             </QueryProvider>
           </ThemeProvider>

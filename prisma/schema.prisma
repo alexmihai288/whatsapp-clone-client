@@ -46,7 +46,7 @@ model Message {
   fileUrl String? @db.Text
 
   memberId String
-  member   Profile @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  member   Profile @relation(fields: [memberId], references: [userId], onDelete: Cascade)
 
   conversationId String
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)

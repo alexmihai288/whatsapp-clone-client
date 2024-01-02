@@ -1,9 +1,8 @@
 import { FC } from "react";
-import { ChatMessages } from "./ChatMessages";
 import { Header } from "@/components/Header";
 import { db } from "@/lib/db";
 import { currentProfile } from "@/lib/CurrentProfile";
-import { SendMessages } from "./SendMessages";
+import MessagesWrapper from "./MessagesWrapper";
 
 interface ChatWrapperProps {
   conversationId: string;
@@ -18,11 +17,7 @@ export const ChatWrapper: FC<ChatWrapperProps> = async ({ conversationId }) => {
     include: {
       memberOne: true,
       memberTwo: true,
-      messages: {
-        include: {
-          member: true,
-        },
-      },
+      messages: true,
     },
   });
   const otherMember =
@@ -30,7 +25,6 @@ export const ChatWrapper: FC<ChatWrapperProps> = async ({ conversationId }) => {
       ? conversation?.memberTwo
       : conversation?.memberOne;
 
-      console.log(conversation)
   return (
     <div
       className="max-h-screen flex flex-col "
@@ -43,10 +37,9 @@ export const ChatWrapper: FC<ChatWrapperProps> = async ({ conversationId }) => {
       <Header
         imageUrl={otherMember?.imageUrl!}
         whereClause="conversation"
-        name="Dingo"
+        name={otherMember?.name}
       />
-      <ChatMessages />
-      <SendMessages />
+      <MessagesWrapper currentMemberId={profile?.userId!} messages={conversation?.messages!} conversationId={conversationId}/>
     </div>
   );
 };
