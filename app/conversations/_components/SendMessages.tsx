@@ -1,5 +1,6 @@
 "use client";
 
+import { EmojiPicker } from "@/components/EmojiPicker";
 import { Input } from "@/components/ui/input";
 import { useSocket } from "@/hooks/use-socket";
 import { Message } from "@prisma/client";
@@ -68,7 +69,9 @@ export const SendMessages: FC<SendMessagesProps> = ({
   return (
     <div className="bg-darkTealGreen flex items-center justify-center gap-5 p-2.5">
       <div className="flex items-center gap-2.5">
-        <Smile className="w-5 h-5 text-muted-foreground" />
+        <EmojiPicker
+          onChange={(emoji: string) => setValue((prevMsg) => prevMsg + emoji)}
+        />
         <Paperclip className="w-5 h-5 text-muted-foreground" />
       </div>
       <div className="flex items-center w-full">

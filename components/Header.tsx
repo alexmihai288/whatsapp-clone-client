@@ -1,13 +1,12 @@
 import { FC, Suspense } from "react";
 import { AvatarWrapper } from "./AvatarWrapper";
-import { ClerkLoaded, ClerkLoading, SignedIn, UserButton } from "@clerk/nextjs";
+import { ClerkLoading, UserButton } from "@clerk/nextjs";
 import { HomeIcons } from "./HomeIcons";
 import { ConversationIcons } from "@/app/conversations/_components/ConversationIcons";
 import { currentProfile } from "@/lib/CurrentProfile";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { Skeleton } from "./ui/skeleton";
-import Image from "next/image";
 interface HeaderProps {
   imageUrl: string;
   name?: string;
@@ -22,7 +21,24 @@ export const Header: FC<HeaderProps> = async ({
   const profile = await currentProfile();
   if (!profile?.userId) return redirect("/setup");
 
+  const existingConversations = await db.conversation.findMany({
+    where: {
+      OR: [{ memberOneId: profile.userId }, { memberTwoId: profile.userId }],
+    },
+  });
+
+  const existingUserIds = existingConversations.flatMap((conversation) => [
+    conversation.memberOneId,
+    conversation.memberTwoId,
+  ]);
+
   const initialUsers = await db.profile.findMany({
+    where: {
+      userId: {
+        notIn: [...existingUserIds],
+      },
+      // You can add additional conditions if needed
+    },
     take: 10,
   });
 

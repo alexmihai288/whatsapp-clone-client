@@ -9,12 +9,25 @@ export async function GET(req: NextRequest) {
 
     const name = req.nextUrl.searchParams.get("name");
 
+    const existingConversations = await db.conversation.findMany({
+      where: {
+        OR: [{ memberOneId: profile.userId }, { memberTwoId: profile.userId }],
+      },
+    });
+
+    const existingUserIds = existingConversations.flatMap((conversation) => [
+      conversation.memberOneId,
+      conversation.memberTwoId,
+    ]);
+
     const users = await db.profile.findMany({
       where: {
-        name: {
-          contains: name || "",
+        userId: {
+          notIn: [...existingUserIds],
         },
+        // You can add additional conditions if needed
       },
+      take: 10,
     });
 
     return NextResponse.json(users);

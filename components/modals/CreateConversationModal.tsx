@@ -59,8 +59,9 @@ export const CreateConversationModal: FC<
     onSuccess: (data) => {
       onClose();
       router.push(`/conversations/${data.id}`);
-      toast.success(`You started a new conversation with ${data.memberTwoId}`);
+      toast.success("You started a new conversation");
       queryClient.invalidateQueries({ queryKey: ["conversationMember"] });
+      queryClient.invalidateQueries({ queryKey: ["users"] });
     },
     onError: (error) => {
       return toast.error("Something went wrong");

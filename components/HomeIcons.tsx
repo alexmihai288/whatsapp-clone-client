@@ -15,11 +15,11 @@ export const HomeIcons: FC<HomeIconsProps> = ({ initialUsers }) => {
   return (
     <>
       <MessageCirclePlus
+        onClick={() => onOpen("createConversation", { initialUsers })}
         key={1}
         className="cursor-pointer w-5 h-5 text-muted-foreground"
       />
       <MoreVertical
-        onClick={() => onOpen("createConversation", { initialUsers })}
         key={2}
         className="cursor-pointer w-5 h-5 text-muted-foreground"
       />
