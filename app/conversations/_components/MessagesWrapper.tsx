@@ -11,12 +11,14 @@ interface MessagesWrapperProps {
   conversationId: string;
   messages: Message[];
   currentMemberId: string;
+  toMemberId: string;
 }
 
 export const MessagesWrapper: FC<MessagesWrapperProps> = ({
   messages,
   conversationId,
   currentMemberId,
+  toMemberId,
 }) => {
   const { data } = useQuery({
     queryKey: ["messages"],
@@ -36,7 +38,7 @@ export const MessagesWrapper: FC<MessagesWrapperProps> = ({
       ]);
     });
 
-    socket.on("receive-message-error", () => {
+    socket.on("receive-message-settled", () => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
     });
     return () => {
@@ -49,6 +51,7 @@ export const MessagesWrapper: FC<MessagesWrapperProps> = ({
     <>
       <ChatMessages currentUserId={currentMemberId} messages={data} />
       <SendMessages
+        toMemberId={toMemberId}
         currentMemberId={currentMemberId}
         conversationId={conversationId}
       />

@@ -22,13 +22,12 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
     }
   }, [messages]);
 
-  console.log(messages);
   return (
     <ScrollArea className="h-screen">
       {messages.map((msg, i) => (
         <div
           ref={i === messages.length - 1 ? lastMessageRef : null}
-          key={msg.id}
+          key={i}
           className={cn(
             currentUserId === msg.memberId
               ? "ml-auto mr-5 bg-tealGreen px-4 py-2 rounded-md w-fit my-5"

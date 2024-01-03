@@ -2,6 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { useSocket } from "@/hooks/use-socket";
+import { Message } from "@prisma/client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Paperclip, Send, Smile } from "lucide-react";
@@ -9,12 +10,14 @@ import { FC, useState } from "react";
 
 interface SendMessagesProps {
   currentMemberId: string;
+  toMemberId: string;
   conversationId: string;
 }
 
 export const SendMessages: FC<SendMessagesProps> = ({
   conversationId,
   currentMemberId,
+  toMemberId,
 }) => {
   const [value, setValue] = useState("");
   const { socket } = useSocket();
@@ -30,25 +33,37 @@ export const SendMessages: FC<SendMessagesProps> = ({
       return data;
     },
     onMutate: (variables) => {
-      socket?.emit("send-message", variables.value, currentMemberId);
+      socket?.emit(
+        "send-message",
+        variables.value,
+        currentMemberId,
+        toMemberId
+      );
+
+      queryClient.setQueryData(["messages"], (oldMessages: Message[]) => [
+        ...oldMessages,
+        { content: variables.value, memberId: currentMemberId },
+      ]);
+
       setValue("");
-    },
-    onError: () => {
-      socket?.emit("new-message-error");
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });
+      socket?.emit("new-message-settled", toMemberId);
     },
   });
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey && value.trim() !== "") {
       // Prevent default behavior (e.g., new line) on Enter key press
       e.preventDefault();
 
-      // Trigger the sendMessage function
       sendMessage({ value });
     }
+  };
+
+  const handleSubmit = (value: string) => {
+    if (value.trim() !== "") sendMessage({ value });
   };
   return (
     <div className="bg-darkTealGreen flex items-center justify-center gap-5 p-2.5">
@@ -66,7 +81,7 @@ export const SendMessages: FC<SendMessagesProps> = ({
         />
         <div className="flex items-center justify-center rounded-tr-md rounded-br-md h-10 bg-[#2a3942] pr-3">
           <Send
-            onClick={() => sendMessage({ value })}
+            onClick={() => handleSubmit(value)}
             className="w-5 h-5 text-muted-foreground"
           />
         </div>
