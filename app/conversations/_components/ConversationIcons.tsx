@@ -1,16 +1,17 @@
-"use client";
-
-import { MoreVertical, Phone, Video } from "lucide-react";
+import { Phone, Video } from "lucide-react";
 import { FC } from "react";
+import { DeleteConversation } from "./DeleteConversation";
 
-interface ConversationIconsProps {}
+interface ConversationIconsProps {
+  conversationId:string
+}
 
-export const ConversationIcons: FC<ConversationIconsProps> = ({}) => {
+export const ConversationIcons: FC<ConversationIconsProps> = ({conversationId}) => {
   return (
     <>
       <Video key={1} className="w-5 h-5 text-muted-foreground" />
       <Phone key={2} className="w-5 h-5 text-muted-foreground" />
-      <MoreVertical key={3} className="w-5 h-5 text-muted-foreground ml-2" />
+      <DeleteConversation conversationId={conversationId}/>
     </>
   );
 };

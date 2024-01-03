@@ -1,4 +1,4 @@
-import { FC, Suspense } from "react";
+import { FC } from "react";
 import { AvatarWrapper } from "./AvatarWrapper";
 import { ClerkLoading, UserButton } from "@clerk/nextjs";
 import { HomeIcons } from "./HomeIcons";
@@ -11,12 +11,14 @@ interface HeaderProps {
   imageUrl: string;
   name?: string;
   whereClause: "home" | "conversation";
+  conversationId?: string;
 }
 
 export const Header: FC<HeaderProps> = async ({
   imageUrl,
   name,
   whereClause,
+  conversationId,
 }) => {
   const profile = await currentProfile();
   if (!profile?.userId) return redirect("/setup");
@@ -41,7 +43,6 @@ export const Header: FC<HeaderProps> = async ({
     },
     take: 10,
   });
-
   return (
     <div
       className={`${
@@ -63,7 +64,9 @@ export const Header: FC<HeaderProps> = async ({
       )}
       <div className="flex items-center gap-2.5 ml-auto">
         {whereClause === "home" && <HomeIcons initialUsers={initialUsers} />}
-        {whereClause === "conversation" && <ConversationIcons />}
+        {whereClause === "conversation" && (
+          <ConversationIcons conversationId={conversationId!} />
+        )}
       </div>
     </div>
   );

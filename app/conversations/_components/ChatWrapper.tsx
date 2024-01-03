@@ -39,6 +39,7 @@ export const ChatWrapper = async ({ conversationId }: ChatWrapperProps) => {
         imageUrl={otherMember?.imageUrl!}
         whereClause="conversation"
         name={otherMember?.name}
+        conversationId={conversationId}
       />
       <MessagesWrapper
         toMemberId={otherMember?.connectionId!}

@@ -24,17 +24,17 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
 
   return (
     <ScrollArea className="h-screen">
-      {messages.map((msg, i) => (
+      {messages?.map((msg, i) => (
         <div
-          ref={i === messages.length - 1 ? lastMessageRef : null}
+          ref={i === messages?.length - 1 ? lastMessageRef : null}
           key={i}
           className={cn(
-            currentUserId === msg.memberId
+            currentUserId === msg?.memberId
               ? "ml-auto mr-5 bg-tealGreen px-4 py-2 rounded-md w-fit my-5"
               : "ml-5 bg-darkTealGreen px-4 py-2 rounded-md w-fit my-5"
           )}
         >
-          <p>{msg.content}</p>
+          <p>{msg?.content}</p>
         </div>
       ))}
     </ScrollArea>
