@@ -2,6 +2,7 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { Message } from "@prisma/client";
+import Image from "next/image";
 import { FC, useEffect, useRef } from "react";
 
 interface ChatMessagesProps {
@@ -34,7 +35,16 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
               : "ml-5 bg-darkTealGreen px-4 py-2 rounded-md w-fit my-5"
           )}
         >
-          <p>{msg?.content}</p>
+          {msg.fileUrl && (
+            <Image
+              src={msg.fileUrl}
+              width={200}
+              height={200}
+              alt="image-url"
+              className="object-cover rounded-md bg-[#2a3942] mb-2"
+            />
+          )}
+          <p className="max-w-28 md:max-w-96 break-words">{msg?.content}</p>
         </div>
       ))}
     </ScrollArea>

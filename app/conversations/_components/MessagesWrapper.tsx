@@ -6,6 +6,8 @@ import { Message } from "@prisma/client";
 import { useSocket } from "@/hooks/use-socket";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchMessages } from "@/lib/queryFns/fetchMessages";
+import { usePathname, useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface MessagesWrapperProps {
   conversationId: string;
@@ -28,15 +30,29 @@ export const MessagesWrapper: FC<MessagesWrapperProps> = ({
 
   const { socket } = useSocket();
   const queryClient = useQueryClient();
+  const pathname = usePathname();
+  const router = useRouter();
   useEffect(() => {
     if (!socket) return;
 
-    socket.on("receive-message", (value, currentMemberId) => {
-      queryClient.setQueryData(["messages"], (oldMessages: Message[]) => [
-        ...oldMessages,
-        { content: value, memberId: currentMemberId },
-      ]);
-    });
+    socket.on(
+      "receive-message",
+      (value, fileUrl, currentMemberId, conversationId) => {
+        if (pathname.includes(conversationId)) {
+          queryClient.setQueryData(["messages"], (oldMessages: Message[]) => [
+            ...oldMessages,
+            { content: value, fileUrl: fileUrl, memberId: currentMemberId },
+          ]);
+        } else {
+          toast.success("You got a new message", {
+            action: {
+              label: "Check",
+              onClick: () => router.push(`/conversations/${conversationId}`),
+            },
+          });
+        }
+      }
+    );
 
     socket.on("receive-message-settled", () => {
       queryClient.invalidateQueries({ queryKey: ["messages"] });

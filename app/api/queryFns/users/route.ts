@@ -24,6 +24,7 @@ export async function GET(req: NextRequest) {
       where: {
         userId: {
           notIn: [...existingUserIds],
+          not: profile.userId,
         },
         // You can add additional conditions if needed
       },

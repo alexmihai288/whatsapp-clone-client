@@ -38,6 +38,7 @@ export const Header: FC<HeaderProps> = async ({
     where: {
       userId: {
         notIn: [...existingUserIds],
+        not: profile.userId,
       },
       // You can add additional conditions if needed
     },

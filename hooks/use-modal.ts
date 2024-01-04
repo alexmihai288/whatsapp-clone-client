@@ -1,7 +1,7 @@
 import { Profile } from "@prisma/client";
 import { create } from "zustand";
 
-export type ModalType = "createConversation";
+export type ModalType = "createConversation"
 
 interface ModalData {
   initialUsers?: Profile[] | [];

@@ -7,14 +7,14 @@ export async function POST(req: Request) {
     const profile = await currentProfile();
     if (!profile) return new NextResponse("Unauthorized", { status: 401 });
 
-    const { value, conversationId } = await req.json();
+    const { value, fileUrl, conversationId } = await req.json();
 
     const newMessage = await db.message.create({
       data: {
         content: value,
         memberId: profile.userId,
         conversationId: conversationId,
-        fileUrl: "",
+        fileUrl: fileUrl,
       },
     });
 

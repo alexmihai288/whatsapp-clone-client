@@ -27,7 +27,7 @@ export const LeftSide = async () => {
   });
 
   return (
-    <div className="flex flex-col max-h-screen">
+    <div className="flex flex-col max-h-screen bg-darkTealGreenDark">
       <Header whereClause="home" imageUrl="/whatsapp-bg.webp" />
       <SearchConversation
         userConversations={conversations}
