@@ -41,7 +41,7 @@ export const SearchConversation: FC<SearchConversationProps> = ({
         </div>
         <div
           onClick={() => setOpen(true)}
-          className="cursor-pointer w-full text-muted-foreground rounded-tl-none rounded-bl-none rounded-tr-md rounded-br-md bg-darkTealGreen h-8 px-3 py-2 text-sm"
+          className="whitespace-nowrap cursor-pointer w-full text-muted-foreground rounded-tl-none rounded-bl-none rounded-tr-md rounded-br-md bg-darkTealGreen h-8 px-3 py-2 text-sm"
         >
           Search for all conversations
         </div>

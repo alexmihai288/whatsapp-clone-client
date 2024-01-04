@@ -10,6 +10,7 @@ import { Paperclip, Send, X } from "lucide-react";
 import { FC, useState } from "react";
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
+import { DrawerWrapper } from "./DrawerWrapper";
 
 interface SendMessagesProps {
   currentMemberId: string;
@@ -125,6 +126,7 @@ export const SendMessages: FC<SendMessagesProps> = ({
               );
             }}
           </CldUploadWidget>
+          <DrawerWrapper currentUserId={currentMemberId} />
         </div>
         <div className="flex items-center w-full">
           <Input

@@ -53,7 +53,9 @@ export const Header: FC<HeaderProps> = async ({
       {name ? (
         <div className="flex items-center gap-2.5">
           <AvatarWrapper imageUrl={imageUrl} />{" "}
-          <p className="text-sm">{name}</p>
+          <p className="text-sm  break-words  xs:truncate xs:max-w-12 sm:max-w-full mr-2.5">
+            {name}
+          </p>
         </div>
       ) : (
         <>

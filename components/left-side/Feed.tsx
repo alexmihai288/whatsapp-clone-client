@@ -9,9 +9,14 @@ import { fetchConversations } from "@/lib/queryFns/fetchUsers";
 interface FeedProps {
   conversations: ConversationWithMembers[];
   currentUserId: string;
+  whereClause?: string;
 }
 
-export const Feed: FC<FeedProps> = ({ conversations, currentUserId}) => {
+export const Feed: FC<FeedProps> = ({
+  conversations,
+  currentUserId,
+  whereClause,
+}) => {
   const { data } = useQuery({
     queryKey: ["conversationMember"],
     queryFn: fetchConversations,
@@ -27,6 +32,7 @@ export const Feed: FC<FeedProps> = ({ conversations, currentUserId}) => {
             : conversation.memberOne;
         return (
           <Conversation
+            whereClause={whereClause}
             key={conversation.id}
             conversationMember={otherMember}
             conversationId={conversation.id}
