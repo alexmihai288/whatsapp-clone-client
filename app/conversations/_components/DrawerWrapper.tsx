@@ -1,8 +1,10 @@
 "use client";
+import { HomeIcons } from "@/components/HomeIcons";
 import { Feed } from "@/components/left-side/Feed";
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { cn } from "@/lib/utils";
 import { ConversationWithMembers } from "@/types";
+import { Profile } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { ChevronDownCircle } from "lucide-react";
 import { FC, useState } from "react";
@@ -30,6 +32,7 @@ export const DrawerWrapper: FC<DrawerWrapperProps> = ({ currentUserId }) => {
   };
 
   const queryClient = useQueryClient();
+
   return (
     <>
       <ChevronDownCircle
@@ -44,8 +47,12 @@ export const DrawerWrapper: FC<DrawerWrapperProps> = ({ currentUserId }) => {
         onOpenChange={setModalOpen}
         onClose={handleClose}
       >
-        <DrawerContent className="max-h-[500px] bg-white">
-          <div className="mt-5" />
+        <DrawerContent className="max-h-[500px] bg-white px-5">
+          <div className="flex items-center justify-end gap-5 my-5">
+            <HomeIcons
+              initialUsers={queryClient.getQueryData(["users"]) as Profile[]}
+            />
+          </div>
           <Feed
             whereClause="drawer"
             currentUserId={currentUserId}

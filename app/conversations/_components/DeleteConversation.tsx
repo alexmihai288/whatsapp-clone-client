@@ -35,6 +35,7 @@ export const DeleteConversation: FC<DeleteConversationProps> = ({
     onSuccess: () => {
       toast.success("You have deleted the conversation");
       queryClient.invalidateQueries({ queryKey: ["conversationMember"] });
+      queryClient.invalidateQueries({ queryKey: ["users"] });
       router.push("/");
     },
     onError: () => {

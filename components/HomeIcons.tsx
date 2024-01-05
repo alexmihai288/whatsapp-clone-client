@@ -15,6 +15,7 @@ export const HomeIcons: FC<HomeIconsProps> = ({ initialUsers }) => {
   return (
     <>
       <MessageCirclePlus
+        onClick={() => onOpen("createGroup")}
         key={1}
         className="cursor-pointer w-5 h-5 text-muted-foreground"
       />

@@ -5,6 +5,7 @@ import { Conversation } from "./Conversation";
 import { useQuery } from "@tanstack/react-query";
 import { ConversationWithMembers } from "@/types";
 import { fetchConversations } from "@/lib/queryFns/fetchUsers";
+import GroupFileUpload from "../GroupFileUpload";
 
 interface FeedProps {
   conversations: ConversationWithMembers[];

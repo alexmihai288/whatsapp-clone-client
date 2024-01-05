@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { CreateConversationModal } from "../modals/CreateConversationModal";
+import { CreateGroupModal } from "../modals/CreateGroupModal";
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -15,6 +16,7 @@ export const ModalProvider = () => {
   return (
     <>
       <CreateConversationModal />
+      <CreateGroupModal />
     </>
   );
 };
