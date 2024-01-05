@@ -25,6 +25,8 @@ model Profile {
   messages               Message[]
   conversationsInitiated Conversation[] @relation("memberOne")
   conversationsReceived  Conversation[] @relation("memberTwo")
+  groupsMember           GroupMember[]
+  groupMessages           GroupMessage[]
 }
 
 model Conversation {
@@ -58,4 +60,43 @@ model Message {
 
   @@index([memberId])
   @@index([conversationId])
+}
+
+model Group {
+  id String @id @default(uuid())
+  name String
+  imageUrl String
+
+  members GroupMember[]
+
+  messages GroupMessage[]
+}
+
+model GroupMember {
+  id      String  @id @default(uuid())
+  isOwner Boolean
+
+  memberId String
+  member   Profile @relation(fields: [memberId], references: [userId], onDelete: Cascade)
+
+  groupId String
+  Group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+}
+
+model GroupMessage {
+  id      String  @id @default(uuid())
+  content String  @db.Text
+  fileUrl String? @db.Text
+
+  memberId String
+  member   Profile @relation(fields: [memberId], references: [userId], onDelete: Cascade)
+
+  groupId String
+  group   Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([memberId])
+  @@index([groupId])
 }

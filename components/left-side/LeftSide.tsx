@@ -26,6 +26,16 @@ export const LeftSide = async () => {
     },
   });
 
+  const groups = await db.group.findMany({
+    where: {
+      members: {
+        some: {
+          memberId: profile?.userId,
+        },
+      },
+    },
+  });
+
   return (
     <div className="flex flex-col max-h-screen bg-darkTealGreenDark">
       <Header whereClause="home" imageUrl="/whatsapp-bg.webp" />
@@ -33,7 +43,11 @@ export const LeftSide = async () => {
         userConversations={conversations}
         currentUserId={profile?.userId!}
       />
-      <Feed currentUserId={profile?.userId!} conversations={conversations} />
+      <Feed
+        groups={groups}
+        currentUserId={profile?.userId!}
+        conversations={conversations}
+      />
     </div>
   );
 };

@@ -21,10 +21,9 @@ export const Conversation: FC<ConversationProps> = ({
     <div
       onClick={() => router.push(`/conversations/${conversationId}`)}
       className={cn(
-        " bg-darkTealGreenDark hover:bg-[#202c33] cursor-pointer transition-colors container py-2 flex items-center gap-2.5",
+        " bg-darkTealGreenDark  rounded-md hover:bg-[#202c33] cursor-pointer transition-colors container py-2 flex items-center gap-2.5",
         pathname.includes(conversationId) && "bg-[#2a3942]",
-        whereClause === "drawer" &&
-          `bg-tealGreenDark hover:bg-tealGreen rounded-md mt-2.5`
+        whereClause === "drawer" && "bg-tealGreenDark hover:bg-tealGreen mt-2.5"
       )}
     >
       <AvatarWrapper

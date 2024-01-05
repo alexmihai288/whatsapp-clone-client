@@ -4,7 +4,7 @@ import { Feed } from "@/components/left-side/Feed";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { cn } from "@/lib/utils";
 import { ConversationWithMembers } from "@/types";
-import { Profile } from "@prisma/client";
+import { Group, Profile } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { ChevronDownCircle } from "lucide-react";
 import { FC, useState } from "react";
@@ -54,6 +54,7 @@ export const DrawerWrapper: FC<DrawerWrapperProps> = ({ currentUserId }) => {
             />
           </div>
           <Feed
+            groups={queryClient.getQueryData(["groups"]) as Group[]}
             whereClause="drawer"
             currentUserId={currentUserId}
             conversations={

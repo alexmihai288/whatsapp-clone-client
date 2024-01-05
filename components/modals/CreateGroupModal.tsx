@@ -15,29 +15,48 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { Input } from "../ui/input";
-
+import Dropzone from "react-dropzone";
+import { FileUpload } from "../FileUploadGroup";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 interface CreateGroupModalProps {}
 
 const formSchema = z.object({
-  name: z.string().min(1, { message: "Server name is required" }),
+  name: z.string().min(1, { message: "Group name is required" }),
+  imageUrl: z.string().min(1, { message: "Group image is required" }),
 });
 
 export const CreateGroupModal: FC<CreateGroupModalProps> = ({}) => {
   const { isOpen, type, onClose } = useModal();
   const isModalOpen = isOpen && type === "createGroup";
-
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      imageUrl: "",
     },
   });
 
+  const queryClient = useQueryClient();
+  const { mutate: createGroup, isPending } = useMutation({
+    mutationFn: async ({ name, imageUrl }: z.infer<typeof formSchema>) => {
+      const { data } = await axios.post("/api/group", { name, imageUrl });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    
-  };
+      return data;
+    },
+    onSuccess: () => {
+      toast.success("You have created a group !");
+      queryClient.invalidateQueries({ queryKey: ["groups"] });
+      onClose();
+      form.reset();
+    },
+    onError: () => {
+      toast.error("Internal server error");
+    },
+  });
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
@@ -46,7 +65,29 @@ export const CreateGroupModal: FC<CreateGroupModalProps> = ({}) => {
           <DialogTitle>Create a group</DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          <form
+            encType="multipart/form-data"
+            onSubmit={form.handleSubmit(() =>
+              createGroup({
+                name: form.getValues("name"),
+                imageUrl: form.getValues("imageUrl"),
+              })
+            )}
+            className="space-y-5"
+          >
+            <FormField
+              control={form.control}
+              name="imageUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FileUpload
+                    endpoint="groupImage"
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="name"
@@ -64,7 +105,13 @@ export const CreateGroupModal: FC<CreateGroupModalProps> = ({}) => {
             />
 
             <DialogFooter className="flex justify-end">
-              <Button className="bg-tealGreenDark text-white hover:bg-tealGreen transition-colors">
+              <Button
+                disabled={isPending}
+                className="bg-tealGreenDark text-white hover:bg-tealGreen transition-colors"
+              >
+                {isPending && (
+                  <Loader2 className="w-4 h-4 mr-2.5 animate-spin" />
+                )}
                 Create
               </Button>
             </DialogFooter>
