@@ -40,6 +40,7 @@ export const LeftSide = async () => {
     <div className="flex flex-col max-h-screen bg-darkTealGreenDark">
       <Header whereClause="home" imageUrl="/whatsapp-bg.webp" />
       <SearchConversation
+        groups={groups}
         userConversations={conversations}
         currentUserId={profile?.userId!}
       />

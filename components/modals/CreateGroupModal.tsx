@@ -21,6 +21,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { useSocket } from "@/hooks/use-socket";
+import { Group } from "@prisma/client";
 
 interface CreateGroupModalProps {}
 
@@ -40,16 +42,18 @@ export const CreateGroupModal: FC<CreateGroupModalProps> = ({}) => {
     },
   });
 
+  const { socket } = useSocket();
   const queryClient = useQueryClient();
   const { mutate: createGroup, isPending } = useMutation({
     mutationFn: async ({ name, imageUrl }: z.infer<typeof formSchema>) => {
       const { data } = await axios.post("/api/group", { name, imageUrl });
 
-      return data;
+      return data as Group;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast.success("You have created a group !");
       queryClient.invalidateQueries({ queryKey: ["groups"] });
+      socket?.emit("join-group", data.id);
       onClose();
       form.reset();
     },

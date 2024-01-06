@@ -1,30 +1,29 @@
 import { FC } from "react";
-import { Header } from "@/components/Header";
 import { db } from "@/lib/db";
 import { currentProfile } from "@/lib/CurrentProfile";
-import { MessagesWrapper } from "./MessagesWrapper";
 import { Loader2 } from "lucide-react";
+import { GroupHeader } from "./GroupHeader";
+import { GroupMessagesWrapper } from "./GroupMessagesWrapper";
 
-interface ChatWrapperProps {
-  conversationId: string;
+interface GroupChatWrapperProps {
+  groupId: string;
 }
 
-export const ChatWrapper = async ({ conversationId }: ChatWrapperProps) => {
+export const GroupChatWrapper = async ({ groupId }: GroupChatWrapperProps) => {
   const profile = await currentProfile();
-  const conversation = await db.conversation.findUnique({
+  const group = await db.group.findUnique({
     where: {
-      id: conversationId,
+      id: groupId,
     },
     include: {
-      memberOne: true,
-      memberTwo: true,
       messages: true,
+      members: {
+        include:{
+          member:true
+        }
+      },
     },
   });
-  const otherMember =
-    conversation?.memberOne.userId === profile?.userId
-      ? conversation?.memberTwo
-      : conversation?.memberOne;
 
   return (
     <div
@@ -35,23 +34,21 @@ export const ChatWrapper = async ({ conversationId }: ChatWrapperProps) => {
         backgroundRepeat: "no-repeat", // Optional: specify background repeat
       }}
     >
-      <Header
-        imageUrl={otherMember?.imageUrl!}
-        whereClause="conversation"
-        name={otherMember?.name}
-        conversationId={conversationId}
+      <GroupHeader
+        groupId={groupId}
+        name={group?.name!}
+        imageUrl={group?.imageUrl!}
       />
-      <MessagesWrapper
-        toMemberId={otherMember?.connectionId!}
+      <GroupMessagesWrapper
+                groupId={groupId}
         currentMemberId={profile?.userId!}
-        messages={conversation?.messages!}
-        conversationId={conversationId}
+        messages={group?.messages!}
       />
     </div>
   );
 };
 
-ChatWrapper.Skeleton = function ChatWrapperSkeleton() {
+GroupChatWrapper.Skeleton = function GroupChatWrapperSkeleton() {
   return (
     <div
       className="flex items-center justify-center h-screen"

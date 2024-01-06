@@ -1,6 +1,5 @@
 import { currentProfile } from "@/lib/CurrentProfile";
 import { db } from "@/lib/db";
-import { revalidatePathUrl } from "@/lib/revalidatePath";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
