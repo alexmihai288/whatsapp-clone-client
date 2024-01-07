@@ -38,11 +38,39 @@ export const GroupIcons: FC<GroupIconsProps> = async ({ groupId, userId }) => {
     },
   });
 
+  const groupMembers = await db.groupMember.findMany({
+    where: {
+      groupId: groupId,
+      memberId: {
+        not: userId, // Exclude the specified user from the group members
+      },
+    },
+    include: {
+      member: true, // Include the associated Profile data for each member
+    },
+  });
+
+  const isGroupOwner = await db.groupMember.findFirst({
+    where: {
+      groupId: groupId,
+      memberId: userId,
+      isOwner: true,
+    },
+  });
+
+  console.log(groupMembers)
   return (
     <>
       <Video key={1} className="w-5 h-5 text-muted-foreground" />
       <Phone key={2} className="w-5 h-5 text-muted-foreground" />
-      <ManageGroupUsers groupId={groupId} usersNotInGroupAndFriends={usersNotInGroupAndFriends} />
+      {isGroupOwner && (
+        <ManageGroupUsers
+          ownerId={userId}
+          groupMembers={groupMembers}
+          groupId={groupId}
+          usersNotInGroupAndFriends={usersNotInGroupAndFriends}
+        />
+      )}
     </>
   );
 };

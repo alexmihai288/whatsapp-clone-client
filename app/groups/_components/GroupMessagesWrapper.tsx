@@ -95,6 +95,11 @@ export const GroupMessagesWrapper: FC<MessagesWrapperProps> = ({
       }
     );
 
+    socket.on("receive-send-kick", () => {
+      toast.error("You have been kicked from a group")
+      queryClient.invalidateQueries({ queryKey: ["groups"] });
+    });
+
     socket.on("receive-group-message-settled", () => {
       queryClient.invalidateQueries({ queryKey: ["groupMessages"] });
     });
@@ -103,6 +108,7 @@ export const GroupMessagesWrapper: FC<MessagesWrapperProps> = ({
       socket.off("receive-group-message");
       socket.off("receive-group-message-settled");
       socket.off("receive-message");
+      socket.off("receive-send-kick");
     };
   }, [queryClient, socket]);
 
