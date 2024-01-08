@@ -50,16 +50,8 @@ export const GroupMessagesWrapper: FC<MessagesWrapperProps> = ({
   useEffect(() => {
     if (!socket) return;
 
-    socket.on("receive-invite-to-group", (groupId) => {
-      toast.success("You got a group invitation", {
-        actionButtonStyle: {
-          color: isPending ? "bg-zinc-400" : "",
-        },
-        action: {
-          label: "Join",
-          onClick: () => joinGroup(groupId),
-        },
-      });
+    socket.on("receive-send-start-conversation", () => {
+      queryClient.invalidateQueries({ queryKey: ["conversationMember"] });
     });
 
     socket.on(
@@ -72,6 +64,18 @@ export const GroupMessagesWrapper: FC<MessagesWrapperProps> = ({
           },
         })
     );
+
+    socket.on("receive-invite-to-group", (groupId) => {
+      toast.success("You got a group invitation", {
+        actionButtonStyle: {
+          color: isPending ? "bg-zinc-400" : "",
+        },
+        action: {
+          label: "Join",
+          onClick: () => joinGroup(groupId),
+        },
+      });
+    });
 
     socket.on(
       "receive-group-message",
@@ -96,7 +100,7 @@ export const GroupMessagesWrapper: FC<MessagesWrapperProps> = ({
     );
 
     socket.on("receive-send-kick", () => {
-      toast.error("You have been kicked from a group")
+      toast.error("You have been kicked from a group");
       queryClient.invalidateQueries({ queryKey: ["groups"] });
     });
 
@@ -109,6 +113,7 @@ export const GroupMessagesWrapper: FC<MessagesWrapperProps> = ({
       socket.off("receive-group-message-settled");
       socket.off("receive-message");
       socket.off("receive-send-kick");
+      socket.off("receive-send-start-conversation");
     };
   }, [queryClient, socket]);
 

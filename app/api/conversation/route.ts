@@ -34,6 +34,9 @@ export async function POST(req: Request) {
         memberOneId: profile.userId,
         memberTwoId: userId,
       },
+      include:{
+        memberTwo:true
+      }
     });
 
     return NextResponse.json(conversation);

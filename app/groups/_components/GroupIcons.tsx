@@ -2,6 +2,8 @@ import { Phone, Video } from "lucide-react";
 import { FC } from "react";
 import { ManageGroupUsers } from "./ManageGroupUsers";
 import { db } from "@/lib/db";
+import { ChatVideoButton } from "@/components/ChatVideoButton";
+import { ChatAudioButton } from "@/components/ChatAudioButton";
 
 interface GroupIconsProps {
   groupId: string;
@@ -58,11 +60,11 @@ export const GroupIcons: FC<GroupIconsProps> = async ({ groupId, userId }) => {
     },
   });
 
-  console.log(groupMembers)
+  console.log(groupMembers);
   return (
     <>
-      <Video key={1} className="w-5 h-5 text-muted-foreground" />
-      <Phone key={2} className="w-5 h-5 text-muted-foreground" />
+      <ChatVideoButton />
+      <ChatAudioButton />
       {isGroupOwner && (
         <ManageGroupUsers
           ownerId={userId}

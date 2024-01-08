@@ -1,17 +1,20 @@
-import { Phone, Video } from "lucide-react";
 import { FC } from "react";
 import { DeleteConversation } from "./DeleteConversation";
+import { ChatVideoButton } from "@/components/ChatVideoButton";
+import { ChatAudioButton } from "@/components/ChatAudioButton";
 
 interface ConversationIconsProps {
-  conversationId:string
+  conversationId: string;
 }
 
-export const ConversationIcons: FC<ConversationIconsProps> = ({conversationId}) => {
+export const ConversationIcons: FC<ConversationIconsProps> = ({
+  conversationId,
+}) => {
   return (
     <>
-      <Video key={1} className="w-5 h-5 text-muted-foreground" />
-      <Phone key={2} className="w-5 h-5 text-muted-foreground" />
-      <DeleteConversation conversationId={conversationId}/>
+      <ChatVideoButton />
+      <ChatAudioButton/>
+      <DeleteConversation conversationId={conversationId} />
     </>
   );
 };

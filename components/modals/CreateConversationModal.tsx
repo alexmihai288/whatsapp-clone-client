@@ -18,7 +18,7 @@ import { Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import axios from "axios";
-import { Conversation } from "@prisma/client";
+import { useSocket } from "@/hooks/use-socket";
 
 interface CreateConversationModalProps {}
 
@@ -50,16 +50,18 @@ export const CreateConversationModal: FC<
 
   const router = useRouter();
 
+  const {socket } = useSocket()
   const queryClient = useQueryClient();
   const { mutate: startConversation, isPending } = useMutation({
     mutationFn: async ({ userId }: { userId: string }) => {
       const { data } = await axios.post("/api/conversation", { userId });
-      return data as Conversation;
+      return data;
     },
     onSuccess: (data) => {
       onClose();
       router.push(`/conversations/${data.id}`);
       toast.success("You started a new conversation");
+      socket?.emit("send-start-conversation",data.memberTwo.connectionId)
       queryClient.invalidateQueries({ queryKey: ["conversationMember"] });
       queryClient.invalidateQueries({ queryKey: ["users"] });
     },

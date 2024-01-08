@@ -52,6 +52,10 @@ export const MessagesWrapper: FC<MessagesWrapperProps> = ({
   useEffect(() => {
     if (!socket) return;
 
+    socket.on("receive-send-start-conversation", () => {
+      queryClient.invalidateQueries({ queryKey: ["conversationMember"] });
+    });
+
     socket.on(
       "receive-message",
       (value, fileUrl, currentMemberId, conversationId) => {
@@ -108,6 +112,7 @@ export const MessagesWrapper: FC<MessagesWrapperProps> = ({
       socket.off("receive-group-message");
       socket.off("receive-invite-to-group");
       socket.off("receive-send-kick");
+      socket.off("receive-send-start-conversation")
     };
   }, [queryClient, socket]);
 
