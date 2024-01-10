@@ -60,7 +60,6 @@ export const GroupIcons: FC<GroupIconsProps> = async ({ groupId, userId }) => {
     },
   });
 
-  console.log(groupMembers);
   return (
     <>
       <ChatVideoButton />

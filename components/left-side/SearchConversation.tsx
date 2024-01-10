@@ -67,7 +67,7 @@ export const SearchConversation: FC<SearchConversationProps> = ({
         <CommandList className="bg-darkTealGreenDark">
           <CommandEmpty>No results found</CommandEmpty>
           <CommandGroup heading={"Your conversations"}>
-            {userConversations.map((conversation) => {
+            {userConversations?.map((conversation) => {
               const otherMember =
                 conversation?.memberOne.userId === currentUserId
                   ? conversation?.memberTwo
@@ -90,7 +90,7 @@ export const SearchConversation: FC<SearchConversationProps> = ({
           </CommandGroup>
 
           <CommandGroup heading={"Your groups"}>
-            {groups.map((group) => {
+            {groups?.map((group) => {
               return (
                 <CommandItem
                   key={group.id}

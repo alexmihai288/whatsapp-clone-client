@@ -26,7 +26,6 @@ export async function DELETE(
         },
       });
 
-    console.log(conversastionToBeDeleted);
 
     return NextResponse.json(conversastionToBeDeleted);
   } catch (error) {

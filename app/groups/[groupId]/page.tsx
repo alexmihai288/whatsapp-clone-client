@@ -2,6 +2,8 @@ import { LeftSide } from "@/components/left-side/LeftSide";
 import { FC, Suspense } from "react";
 import { GroupChatWrapper } from "../_components/GroupChatWrapper";
 import { MediaRoom } from "@/components/MediaRoom";
+import { Group } from "@prisma/client";
+import getGroups from "@/lib/static/getGroups";
 
 interface pageProps {
   params: { groupId: string };
@@ -11,7 +13,7 @@ interface pageProps {
   };
 }
 
-const page: FC<pageProps> = ({ params: { groupId }, searchParams }) => {
+const page: FC<pageProps> = async ({ params: { groupId }, searchParams }) => {
   return (
     <div className="flex">
       <div className="hidden xs:block xs:flex-1">
@@ -36,3 +38,12 @@ const page: FC<pageProps> = ({ params: { groupId }, searchParams }) => {
 };
 
 export default page;
+
+export async function generateStaticParams() {
+  const groupsData = await getGroups();
+  if (groupsData?.length === 0) return [];
+
+  return groupsData?.map((gr: Group) => ({
+    groupId: gr.id.toString(),
+  }));
+}

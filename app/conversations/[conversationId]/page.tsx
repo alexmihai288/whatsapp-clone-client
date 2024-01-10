@@ -2,6 +2,8 @@ import { LeftSide } from "@/components/left-side/LeftSide";
 import { FC, Suspense } from "react";
 import { ChatWrapper } from "../_components/ChatWrapper";
 import { MediaRoom } from "@/components/MediaRoom";
+import getConversations from "@/lib/static/getConversations";
+import { Conversation } from "@prisma/client";
 
 interface pageProps {
   params: { conversationId: string };
@@ -40,3 +42,12 @@ const page: FC<pageProps> = ({ params, searchParams }) => {
 };
 
 export default page;
+
+export async function generateStaticParams() {
+  const conversationData = await getConversations();
+  if (conversationData?.length === 0) return [];
+
+  return conversationData?.map((gr: Conversation) => ({
+    conversationId: gr.id.toString(),
+  }));
+}
