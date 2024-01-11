@@ -2,12 +2,13 @@ import { currentProfile } from "@/lib/CurrentProfile";
 import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { groupId: string } }
+) {
   try {
     const profile = await currentProfile();
     if (!profile) return new NextResponse("Unauthorized", { status: 401 });
-
-    const groupId = req.nextUrl.searchParams.get("groupId");
 
     const usersNotInGroupAndFriends = await db.profile.findMany({
       where: {
@@ -16,7 +17,7 @@ export async function GET(req: NextRequest) {
         },
         groupsMember: {
           none: {
-            groupId: groupId!, // Exclude users who are already in the specified group
+            groupId: params.groupId, // Exclude users who are already in the specified group
           },
         },
         OR: [

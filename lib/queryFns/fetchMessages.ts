@@ -7,7 +7,7 @@ export const fetchMessages = async ({
   conversationId: string;
 }) => {
   const { data } = await axios.get(
-    `/api/queryFns/messages?conversationId=${conversationId}`
+    `/api/queryFns/messages/${conversationId}`
   );
   return data as Message[];
 };

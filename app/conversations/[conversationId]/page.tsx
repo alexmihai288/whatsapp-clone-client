@@ -43,11 +43,11 @@ const page: FC<pageProps> = ({ params, searchParams }) => {
 
 export default page;
 
-  // export async function generateStaticParams() {
-  //   const conversationData = await getConversations();
-  //   if (conversationData?.length === 0) return [];
+  export async function generateStaticParams() {
+    const conversationData = await getConversations();
+    if (conversationData?.length === 0) return [];
 
-  //   return conversationData?.map((gr: Conversation) => ({
-  //     conversationId: gr.id.toString(),
-  //   }));
-  // }
+    return conversationData?.map((gr: Conversation) => ({
+      conversationId: gr.id.toString(),
+    }));
+  }

@@ -9,7 +9,7 @@ export const fetchGroupMembers = async ({
   ownerId: string;
 }) => {
   const { data } = await axios.get(
-    `/api/queryFns/groupMembers?groupId=${groupId}&ownerId=${ownerId}`
+    `/api/queryFns/groupMembers/${groupId}/${ownerId}`
   );
   return data as (GroupMember & {
     member: Profile;

@@ -2,19 +2,16 @@ import { currentProfile } from "@/lib/CurrentProfile";
 import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest) {
+export async function GET(req: NextRequest,{params}:{params:{groupId:string, ownerId:string}}) {
   try {
     const profile = await currentProfile();
     if (!profile) return new NextResponse("Unauthorized", { status: 401 });
 
-    const groupId = req.nextUrl.searchParams.get("groupId");
-    const ownerId = req.nextUrl.searchParams.get("ownerId");
-
     const groupMembers = await db.groupMember.findMany({
       where: {
-        groupId: groupId!,
+        groupId: params.groupId,
         memberId: {
-          not: ownerId!, // Exclude the specified user from the group members
+          not: params.ownerId, // Exclude the specified user from the group members
         },
       },
       include: {

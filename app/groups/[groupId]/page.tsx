@@ -39,11 +39,11 @@ const page: FC<pageProps> = async ({ params: { groupId }, searchParams }) => {
 
 export default page;
 
-// export async function generateStaticParams() {
-//   const groupsData = await getGroups();
-//   if (groupsData?.length === 0) return [];
+export async function generateStaticParams() {
+  const groupsData = await getGroups();
+  if (groupsData?.length === 0) return [];
 
-//   return groupsData?.map((gr: Group) => ({
-//     groupId: gr.id.toString(),
-//   }));
-// }
+  return groupsData?.map((gr: Group) => ({
+    groupId: gr.id.toString(),
+  }));
+}

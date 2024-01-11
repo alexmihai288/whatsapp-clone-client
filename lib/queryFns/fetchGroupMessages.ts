@@ -6,6 +6,6 @@ export const fetchGroupMessages = async ({
 }: {
   groupId: string;
 }) => {
-  const { data } = await axios.get(`/api/queryFns/groupMessages?groupId=${groupId}`);
+  const { data } = await axios.get(`/api/queryFns/groupMessages/${groupId}`);
   return data as GroupMessage[];
 };
