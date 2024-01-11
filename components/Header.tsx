@@ -62,7 +62,7 @@ export const Header: FC<HeaderProps> = async ({
           <ClerkLoading>
             <Skeleton className="rounded-full h-8 w-8 bg-darkTealGreenDark" />
           </ClerkLoading>
-          <UserButton />
+          <UserButton afterSignOutUrl="/"/>
         </>
       )}
       <div className="flex items-center gap-2.5 ml-auto">
