@@ -5,6 +5,5 @@ export default async function getConversations() {
   });
   if (!res.ok) throw new Error("failed");
   const data = await res.json()
-  console.log(data)
   return data
 }
