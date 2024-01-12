@@ -35,6 +35,7 @@ export const Feed: FC<FeedProps> = ({
     initialData: groups,
   });
 
+
   return (
     <ScrollArea className="h-screen pr-5">
       <div className="container mt-5 mb-2.5 flex items-center gap-2.5 text-sm text-muted-foreground">

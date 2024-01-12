@@ -13,7 +13,8 @@ interface pageProps {
   };
 }
 
-const page: FC<pageProps> = ({ params, searchParams }) => {
+const page: FC<pageProps> = async ({ params, searchParams }) => {
+  const data = await getConversations();
   return (
     <div className="flex">
       <div className="hidden xs:block xs:flex-1">
@@ -43,12 +44,9 @@ const page: FC<pageProps> = ({ params, searchParams }) => {
 
 export default page;
 
-  // export async function generateStaticParams() {
-  //   const conversationData = await getConversations();
-  //   console.log(conversationData,"dada")
-  //   if (conversationData?.length === 0) return [];
+export async function generateStaticParams() {
+  const conversationsData: Conversation[] = await getConversations();
+  
 
-  //   return conversationData?.map((cv: Conversation) => ({
-  //     conversationId: cv.id.toString(),
-  //   }));
-  // }
+  return conversationsData?.map((conv) => ({ conversationId: conv.id }));
+}

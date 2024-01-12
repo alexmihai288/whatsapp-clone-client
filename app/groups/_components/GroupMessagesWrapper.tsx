@@ -25,7 +25,7 @@ export const GroupMessagesWrapper: FC<MessagesWrapperProps> = ({
     queryKey: ["groupMessages"],
     queryFn: async () => {
       const { data } = await axios.get(
-        `/api/queryFns/groupMessages?groupId=${groupId}`
+        `/api/queryFns/groupMessages/groupId=${groupId}`
       );
       return data as GroupMessage[];
     },
