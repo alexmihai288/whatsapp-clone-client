@@ -27,7 +27,7 @@ export const CreateConversationModal: FC<
 > = ({}) => {
   const [name, setName] = useState("");
 
-  const { isOpen, type, onClose} = useModal();
+  const { isOpen, type, onClose } = useModal();
   const isModalOpen = isOpen && type === "createConversation";
 
   const {
@@ -37,6 +37,7 @@ export const CreateConversationModal: FC<
   } = useQuery({
     queryKey: ["users"],
     queryFn: () => fetchUsers({ name }),
+    initialData: [],
   });
 
   useEffect(() => {
@@ -47,7 +48,7 @@ export const CreateConversationModal: FC<
     return () => clearTimeout(delayDebounceFn);
   }, [name, refetch]);
 
-  console.log(users);
+  console.log(users, "dadada");
 
   const router = useRouter();
 
