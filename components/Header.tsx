@@ -65,12 +65,7 @@ export const Header: FC<HeaderProps> = async ({
           <UserButton afterSignOutUrl="/" />
         </>
       )}
-      <div className="flex items-center gap-2.5 ml-auto">
-        {whereClause === "home" && <HomeIcons initialUsers={usersWithoutConversation} />}
-        {whereClause === "conversation" && (
-          <ConversationIcons conversationId={conversationId!} />
-        )}
-      </div>
+
     </div>
   );
 };
