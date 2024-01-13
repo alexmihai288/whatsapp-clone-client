@@ -1,6 +1,6 @@
 export default async function getConversations() {
   const conversations = await fetch(
-    "http://localhost:3000/api/staticRoutes/getConversations",
+    "https://whatsapp-clone-client-alexmihai288.vercel.app/api/staticRoutes/getConversations",
     {
       next: {
         revalidate: 60,

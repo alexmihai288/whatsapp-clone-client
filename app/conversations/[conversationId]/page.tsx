@@ -44,9 +44,9 @@ const page: FC<pageProps> = async ({ params, searchParams }) => {
 
 export default page;
 
-// export async function generateStaticParams() {
-//   const conversationsData: Conversation[] = await getConversations();
+export async function generateStaticParams() {
+  const conversationsData: Conversation[] = await getConversations();
   
 
-//   return conversationsData?.map((conv) => ({ conversationId: conv.id }));
-// }
+  return conversationsData?.map((conv) => ({ conversationId: conv.id }));
+}

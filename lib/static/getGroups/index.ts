@@ -1,6 +1,6 @@
 export default async function getGroups() {
   const groups = await fetch(
-    "http://localhost:3000/api/staticRoutes/getGroups",
+    "https://whatsapp-clone-client-alexmihai288.vercel.app/api/staticRoutes/getGroups",
     {
       next: {
         revalidate: 60,
