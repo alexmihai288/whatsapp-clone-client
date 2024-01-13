@@ -48,7 +48,7 @@ export const CreateConversationModal: FC<
     return () => clearTimeout(delayDebounceFn);
   }, [name, refetch]);
 
-  console.log(users)
+  console.log(users);
 
   const router = useRouter();
 
@@ -96,27 +96,29 @@ export const CreateConversationModal: FC<
         )}
         <ScrollArea className="h-48">
           <div className="space-y-2.5">
-            {users?.map((user) => (
-              <div
-                onClick={() => startConversation({ userId: user.userId })}
-                key={user.id}
-                className="flex items-center justify-between p-2 rounded-md hover:text-white hover:bg-tealGreen transition-colors cursor-pointer"
-              >
-                <div className="flex items-center gap-2">
-                  <AvatarWrapper imageUrl={user.imageUrl} />
-                  {user.name}
-                </div>
-                <Button
-                  disabled={isPending}
-                  className="border border-tealGreen text-tealGreenDark"
+            {users &&
+              users.length > 0 &&
+              users?.map((user) => (
+                <div
+                  onClick={() => startConversation({ userId: user.userId })}
+                  key={user.id}
+                  className="flex items-center justify-between p-2 rounded-md hover:text-white hover:bg-tealGreen transition-colors cursor-pointer"
                 >
-                  Start conversation{" "}
-                  {isPending && (
-                    <Loader2 className="animate-spin ml-2 w-4 h-4" />
-                  )}
-                </Button>
-              </div>
-            ))}
+                  <div className="flex items-center gap-2">
+                    <AvatarWrapper imageUrl={user.imageUrl} />
+                    {user.name}
+                  </div>
+                  <Button
+                    disabled={isPending}
+                    className="border border-tealGreen text-tealGreenDark"
+                  >
+                    Start conversation{" "}
+                    {isPending && (
+                      <Loader2 className="animate-spin ml-2 w-4 h-4" />
+                    )}
+                  </Button>
+                </div>
+              ))}
           </div>
         </ScrollArea>
       </DialogContent>
