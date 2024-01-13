@@ -20,7 +20,7 @@ export const HomeIcons: FC<HomeIconsProps> = ({ initialUsers }) => {
         className="cursor-pointer w-5 h-5 text-muted-foreground"
       />
       <UserRoundPlus
-        onClick={() => onOpen("createConversation", { initialUsers })}
+        // onClick={() => onOpen("createConversation", { initialUsers })}
         key={2}
         className="cursor-pointer w-5 h-5 text-muted-foreground"
       />
