@@ -25,13 +25,19 @@ export async function GET(
     ]);
     // Fetch users who don't have conversations with the current user
 
-    const usersWithoutConversation = await db.profile.findMany({
-      where: {
-        userId: {
-          notIn: [...existingUserIds, profile.userId],
+    let usersWithoutConversation;
+    if (params.name.trim() !== "") {
+      usersWithoutConversation = await db.profile.findMany({
+        where: {
+          userId: {
+            notIn: [...existingUserIds, profile.userId],
+          },
+          name: {
+            contains: params.name,
+          },
         },
-      },
-    });
+      });
+    }
 
     return NextResponse.json(usersWithoutConversation);
   } catch (error) {
