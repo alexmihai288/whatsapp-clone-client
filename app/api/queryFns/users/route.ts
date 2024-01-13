@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
     const profile = await currentProfile();
     if (!profile) return new NextResponse("Unauthorized", { status: 401 });
 
-    const name = req.nextUrl.searchParams.get("name");
+    // const name = req.nextUrl.searchParams.get("name");
 
     const existingConversations = await db.conversation.findMany({
       where: {
@@ -26,9 +26,7 @@ export async function GET(req: NextRequest) {
         userId: {
           notIn: [...existingUserIds, profile.userId],
         },
-        name: {
-          contains: name!,
-        },
+       
       },
     });
 
