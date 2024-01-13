@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 export const revalidate = 0;
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 export default function RootLayout({
   children,
@@ -24,10 +24,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-      <html lang="en">
+    <html lang="en">
+      <ClerkProvider>
         <body className={inter.className}>
           <ThemeProvider
-            attribute="class" 
+            attribute="class"
             defaultTheme="dark"
             storageKey="whatsapp-theme"
           >
@@ -39,6 +40,7 @@ export default function RootLayout({
             </QueryProvider>
           </ThemeProvider>
         </body>
-      </html>
+      </ClerkProvider>
+    </html>
   );
 }
