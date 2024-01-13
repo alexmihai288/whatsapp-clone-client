@@ -29,7 +29,6 @@ export const CreateConversationModal: FC<
 
   const { isOpen, type, onClose, data } = useModal();
   const isModalOpen = isOpen && type === "createConversation";
-  console.log(data.initialUsers)
 
   const {
     data: users,

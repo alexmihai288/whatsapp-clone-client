@@ -13,7 +13,9 @@ interface pageProps {
   };
 }
 
-const page: FC<pageProps> = async ({ params: { groupId }, searchParams }) => {
+
+const page: FC<pageProps> = async ({ params, searchParams }) => {
+  const { groupId } = params;
   return (
     <div className="flex">
       <div className="hidden xs:block xs:flex-1">
@@ -39,8 +41,8 @@ const page: FC<pageProps> = async ({ params: { groupId }, searchParams }) => {
 
 export default page;
 
-export async function generateStaticParams() {
-  const groupsData: Group[] = await getGroups();
+// export async function generateStaticParams() {
+//   const groupsData: Group[] = await getGroups();
 
-  return groupsData?.map((group) => ({ groupId: group.id }));
-}
+//   return groupsData?.map((group) => ({ groupId: group.id }));
+// }
