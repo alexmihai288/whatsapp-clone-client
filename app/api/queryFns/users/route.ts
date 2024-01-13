@@ -26,12 +26,11 @@ export async function GET(req: NextRequest) {
         userId: {
           notIn: [...existingUserIds, profile.userId],
         },
-       
       },
     });
 
     return NextResponse.json(usersWithoutConversation);
   } catch (error) {
-    return new NextResponse("Internal Error");
+    return new NextResponse((error as Error).message);
   }
 }
