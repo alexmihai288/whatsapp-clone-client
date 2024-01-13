@@ -27,7 +27,7 @@ export const CreateConversationModal: FC<
 > = ({}) => {
   const [name, setName] = useState("");
 
-  const { isOpen, type, onClose, data } = useModal();
+  const { isOpen, type, onClose} = useModal();
   const isModalOpen = isOpen && type === "createConversation";
 
   const {
@@ -37,7 +37,6 @@ export const CreateConversationModal: FC<
   } = useQuery({
     queryKey: ["users"],
     queryFn: () => fetchUsers({ name }),
-    initialData: data?.initialUsers || [],
   });
 
   useEffect(() => {

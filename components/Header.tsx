@@ -29,21 +29,22 @@ export const Header: FC<HeaderProps> = async ({
     },
   });
 
+  // Extract user IDs from existing conversations
   const existingUserIds = existingConversations.flatMap((conversation) => [
     conversation.memberOneId,
     conversation.memberTwoId,
   ]);
 
-  const initialUsers = await db.profile.findMany({
+  // Fetch users who don't have conversations with the current user
+  const usersWithoutConversation = await db.profile.findMany({
     where: {
       userId: {
-        notIn: [...existingUserIds],
-        not: profile.userId,
+        notIn: [...existingUserIds, profile.userId],
       },
       // You can add additional conditions if needed
     },
-    take: 10,
   });
+
   return (
     <div
       className={`${
@@ -62,11 +63,11 @@ export const Header: FC<HeaderProps> = async ({
           <ClerkLoading>
             <Skeleton className="rounded-full h-8 w-8 bg-darkTealGreenDark" />
           </ClerkLoading>
-          <UserButton afterSignOutUrl="/"/>
+          <UserButton afterSignOutUrl="/" />
         </>
       )}
       <div className="flex items-center gap-2.5 ml-auto">
-        {whereClause === "home" && <HomeIcons initialUsers={initialUsers} />}
+        {whereClause === "home" && <HomeIcons initialUsers={usersWithoutConversation} />}
         {whereClause === "conversation" && (
           <ConversationIcons conversationId={conversationId!} />
         )}

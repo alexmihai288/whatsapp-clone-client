@@ -15,23 +15,24 @@ export async function GET(req: NextRequest) {
       },
     });
 
+    // Extract user IDs from existing conversations
     const existingUserIds = existingConversations.flatMap((conversation) => [
       conversation.memberOneId,
       conversation.memberTwoId,
     ]);
-
-    const users = await db.profile.findMany({
+    // Fetch users who don't have conversations with the current user
+    const usersWithoutConversation = await db.profile.findMany({
       where: {
         userId: {
-          notIn: [...existingUserIds],
-          not: profile.userId,
+          notIn: [...existingUserIds, profile.userId],
         },
-        // You can add additional conditions if needed
+        name: {
+          contains: name!,
+        },
       },
-      take: 10,
     });
 
-    return NextResponse.json(users);
+    return NextResponse.json(usersWithoutConversation);
   } catch (error) {
     return new NextResponse("Internal Error");
   }
