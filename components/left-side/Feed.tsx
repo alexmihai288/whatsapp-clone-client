@@ -36,13 +36,14 @@ export const Feed: FC<FeedProps> = ({
   });
 
 
+
   return (
     <ScrollArea className="h-screen pr-5">
       <div className="container mt-5 mb-2.5 flex items-center gap-2.5 text-sm text-muted-foreground">
         <p>Conversations</p>
         <Users className="w-4 h-4" />
       </div>
-      {data1.map((conversation) => {
+      {data1?.map((conversation) => {
         const otherMember =
           conversation.memberOne.userId === currentUserId
             ? conversation.memberTwo
@@ -61,7 +62,7 @@ export const Feed: FC<FeedProps> = ({
         <GroupIcon className="w-4 h-4" />
       </div>
 
-      {data2.map((group) => {
+      {data2?.map((group) => {
         return (
           <GroupComponent
             whereClause={whereClause}
