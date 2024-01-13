@@ -37,7 +37,7 @@ export const CreateConversationModal: FC<
   } = useQuery({
     queryKey: ["users"],
     queryFn: () => fetchUsers({ name }),
-    initialData: data?.initialUsers,
+    initialData: data?.initialUsers || [],
   });
 
   useEffect(() => {
@@ -48,9 +48,11 @@ export const CreateConversationModal: FC<
     return () => clearTimeout(delayDebounceFn);
   }, [name, refetch]);
 
+  console.log(users)
+
   const router = useRouter();
 
-  const {socket } = useSocket()
+  const { socket } = useSocket();
   const queryClient = useQueryClient();
   const { mutate: startConversation, isPending } = useMutation({
     mutationFn: async ({ userId }: { userId: string }) => {
@@ -61,7 +63,7 @@ export const CreateConversationModal: FC<
       onClose();
       router.push(`/conversations/${data.id}`);
       toast.success("You started a new conversation");
-      socket?.emit("send-start-conversation",data.memberTwo.connectionId)
+      socket?.emit("send-start-conversation", data.memberTwo.connectionId);
       queryClient.invalidateQueries({ queryKey: ["conversationMember"] });
       queryClient.invalidateQueries({ queryKey: ["users"] });
     },
